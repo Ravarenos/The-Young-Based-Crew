@@ -1,0 +1,168 @@
+import java.util.*;
+
+public class ConnectFour2 {
+
+    final static int R = 1;
+    final static int Y = 2;
+
+    public static void main(String[] args)
+    {
+        int[][] board = new int[6][8];
+        int turnCount = 0;
+
+        printBoard(board);
+        while (chickenDinner(board) == false)
+        {
+            if (turnCount % 2 == 0)
+            {
+                redDisk(board);
+            }
+            else if(chickenDinner(board) == true)
+            {
+                break;
+            }
+            else
+            {
+                cpuYellowDisk(board);
+            }
+            turnCount++;
+            printBoard(board);
+
+
+        }
+    }
+
+    public static void printBoard(int[][] x)
+    {
+        for (int r = 0; r < x.length; r++)
+        {
+            for (int c = 0; c < x[r].length; c++)
+            {
+                if(x[r][c] == R)
+                {
+                    System.out.print("R");
+                }
+                else if(x[r][c] == Y)
+                {
+                    System.out.print("Y");
+                }
+                else
+                    System.out.print("| ");
+            }
+            System.out.println();
+        }
+    }
+    public static void redDisk(int[][] x)
+    {
+        Scanner input = new Scanner(System.in);
+        System.out.println("Drop a red disk at column (0-6): ");
+        int choice = input.nextInt();
+
+        for(int r = 5; r >= 0; r--)
+        {
+            if(x[r][choice] == 0)
+            {
+                x[r][choice] = R;
+                break;
+            }
+        }
+    }
+    public static void cpuYellowDisk(int[][]x)
+    {
+        Random randomNumber = new Random();
+        int AIChoice = randomNumber.nextInt((6) + 1);
+        System.out.println("Computer chose column "+AIChoice+".");
+
+        for(int r = 5; r >= 0; r--)
+        {
+            if(x[r][AIChoice] == 0)
+            {
+                x[r][AIChoice] = Y;
+                break;
+            }
+        }
+    }
+    public static boolean chickenDinner(int[][]x)
+    {
+        boolean endGame = false;
+
+        //horizontal check
+        for(int r = 0; r < x.length; r++)
+        {
+            int sum = 0;
+            for(int c = 0; c < x[r].length-3; c++)
+            {
+                sum = x[r][c] + x[r][c+1] + x[r][c+2] + x[r][c+3];
+            }
+            if(sum == 4)
+            {
+                System.out.println("Connect Four!");
+                System.out.println("Red wins!");
+                endGame = true;
+            }
+            else if(sum == 8)
+            {
+                System.out.println("Connect Four!");
+                System.out.println("Yellow wins!");
+                endGame = true;
+            }
+        }
+
+        //vertical check
+        for(int c = 0; c < x[0].length; c++)
+        {
+            int sum = 0;
+            for(int r = 0; r < x.length-3; r++)
+            {
+                sum = x[r][c] + x[r+1][c] + x[r+2][c] + x[r+3][c];
+            }
+
+            if(sum == 4)
+            {
+                System.out.println("Connect Four!");
+                System.out.println("Red wins!");
+                endGame = true;
+            }
+            else if(sum == 8)
+            {
+                System.out.println("Connect Four!");
+                System.out.println("Yellow wins!");
+                endGame = true;
+            }
+        }
+
+        //diagonal check
+        for(int r = 0; r < x.length-3; r++)
+        {
+            for(int c = 0; c < x[r].length-3; c++)
+            {
+                if(x[r][c] + x[r+1][c+1] + x[r+2][c+2] + x[r+3][c+3] == 4)
+                {
+                    System.out.println("Connect Four!");
+                    System.out.println("Red wins!");
+                    endGame = true;
+                }
+                else if(x[r][c] + x[r+1][c+1] + x[r+2][c+2] + x[r+3][c+3] == 8)
+                {
+                    System.out.println("Connect Four!");
+                    System.out.println("Yellow wins!");
+                    endGame = true;
+                }
+                if(x[r][c+3] + x[r+1][c+2] + x[r+2][c+1] + x[r+3][c] == 4)
+                {
+                    System.out.println("Connect Four!");
+                    System.out.println("Red wins!");
+                    endGame = true;
+                }
+                else if(x[r][c+3] + x[r+1][c+2] + x[r+2][c+1] + x[r+3][c] == 8)
+                {
+                    System.out.println("Connect Four!");
+                    System.out.println("Yellow wins!");
+                    endGame = true;
+                }
+
+            }
+        }
+        return endGame;
+    }
+}
